@@ -15,12 +15,12 @@ public:
 	Transform2Hz(int64_t ms);
 	bool Initial();
 	void Run();
-	void StopTimer();
+	void StartPublish();
 private:	
-	void LaserScanCallback(const sensor_msgs::LaserScan& laser_scan);
-	void ImuCallback(const sensor_msgs::Imu& imu);
-	void WheelFeedbackCallback(const andbot::WheelFb::ConstPtr& wheel_fb);
-	void* TimerThread(void* obj);
+	void LaserScanCallback(sensor_msgs::LaserScan laser_scan);
+	void ImuCallback(sensor_msgs::Imu imu);
+	void WheelFeedbackCallback(andbot::WheelFb wheel_fb);
+	static void* PublishThread(void* obj);
 	
 		
 	ros::NodeHandle	m_nhMyNodeHandle;
@@ -31,7 +31,7 @@ private:
 	ros::Publisher	m_pubImuHz;
 	ros::Publisher	m_pubWheelFeedbackHz;
 	
-	pthread_t		*m_TimerThreadID;
+	pthread_t		m_PublishThreadID;
 	
 	int64_t			m_i64Interval;
 	int64_t			m_i64TotalMillionSeconds;

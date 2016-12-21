@@ -116,6 +116,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(tf2hz src/main.cpp src/tf2hz.cpp src/monotonic_time.cpp)
+target_link_libraries(tf2hz ${catkin_LIBRARIES})
+
 ## Declare a C++ library
 # add_library(tf2hz
 #   src/${PROJECT_NAME}/tf2hz.cpp
