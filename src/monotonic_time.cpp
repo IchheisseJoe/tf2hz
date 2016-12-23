@@ -1,4 +1,5 @@
 #include "monotonic_time.h"
+#include <iostream>
 #include <string.h>
 
 #define NANOSEC_PERSEC	1000000000ll
@@ -6,6 +7,8 @@
 #define MILLISEC_PERSEC	1000ll
 #define NANO2MICRO		1000
 #define NANO2MILLI		1000000
+
+using namespace std;
 
 MonotonicTime::MonotonicTime()
 {
@@ -22,12 +25,13 @@ MonotonicTime::MonotonicTime(const MonotonicTime& mt)
 MonotonicTime& MonotonicTime::Now()
 {
 	clock_gettime(CLOCK_MONOTONIC, &m_TimeSpec);
+	return *this;
 }
 
 MonotonicTime MonotonicTime::operator+(MonotonicTime& mt)
 {
 	MonotonicTime rc;
-	int64_t	ns=this->ToNanoSecond() + mt.ToNanoSecond();
+	int64_t	ns=ToNanoSecond() + mt.ToNanoSecond();
 	
 	rc.m_TimeSpec.tv_sec	= ns / NANOSEC_PERSEC;
 	rc.m_TimeSpec.tv_nsec	= ns % NANOSEC_PERSEC;
@@ -38,7 +42,7 @@ MonotonicTime MonotonicTime::operator+(MonotonicTime& mt)
 MonotonicTime MonotonicTime::operator-(MonotonicTime& mt)
 {
 	MonotonicTime rc;
-	int64_t	ns=this->ToNanoSecond() - mt.ToNanoSecond();
+	int64_t	ns=ToNanoSecond() - mt.ToNanoSecond();
 	
 	rc.m_TimeSpec.tv_sec	= ns / NANOSEC_PERSEC;
 	rc.m_TimeSpec.tv_nsec	= ns % NANOSEC_PERSEC;
@@ -49,7 +53,7 @@ MonotonicTime MonotonicTime::operator-(MonotonicTime& mt)
 int64_t MonotonicTime::ToNanoSecond()
 {
 	int64_t rc;
-	rc = ((int64_t)m_TimeSpec.tv_sec)*NANOSEC_PERSEC + m_TimeSpec.tv_nsec;
+	rc = m_TimeSpec.tv_sec*NANOSEC_PERSEC + m_TimeSpec.tv_nsec;
 	return rc;
 }
 
