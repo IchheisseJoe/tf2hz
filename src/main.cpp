@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	ros::init(argc, argv, "tf2hz");
-	Transform2Hz tf2hz(5000);
+	Transform2Hz tf2hz(1000);
 	tf2hz.Initial();
 	tf2hz.Run();
 	return 0;

@@ -107,6 +107,8 @@ void Transform2Hz::StartPublish()
 void Transform2Hz::Run()
 {
 	pthread_create(&m_PublishThreadID, NULL, &Transform2Hz::PublishThread, (void*)this);
-	ros::spin();
+	ros::MultiThreadedSpinner spinner(3);
+	spinner.spin();
+	//ros::spin();
 	pthread_join(m_PublishThreadID, NULL);
 }
