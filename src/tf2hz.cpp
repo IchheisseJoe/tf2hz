@@ -34,19 +34,19 @@ bool Transform2Hz::Initial()
 void Transform2Hz::LaserScanCallback(sensor_msgs::LaserScan laser_scan)
 {
 	m_i64LaserScanCount++;
-	cout<<"Transform2Hz::LaserScanCallback() : "<<m_i64LaserScanCount<<endl;
+	//cout<<"Transform2Hz::LaserScanCallback() : "<<m_i64LaserScanCount<<endl;
 }
 
 void Transform2Hz::ImuCallback(sensor_msgs::Imu imu)
 {
 	m_i64ImuCount++;
-	cout<<"Transform2Hz::ImuCallback() : "<<m_i64ImuCount<<endl;
+	//cout<<"Transform2Hz::ImuCallback() : "<<m_i64ImuCount<<endl;
 }
 
 void Transform2Hz::WheelFeedbackCallback(andbot::WheelFb wheel_fb)
 {
 	m_i64WheelFeedbackCount++;
-	cout<<"Transform2Hz::WheelFeedbackCallback() : "<<m_i64WheelFeedbackCount<< endl;
+	//cout<<"Transform2Hz::WheelFeedbackCallback() : "<<m_i64WheelFeedbackCount<< endl;
 }
 
 void* Transform2Hz::PublishThread(void* dies)
@@ -64,9 +64,10 @@ void Transform2Hz::StartPublish()
 	int64_t	i64WFDCnt;
 	std_msgs::Float32	temp;
 	MonotonicTime	Start, End;
+	Start.Now();
 	while(ros::ok())
 	{	
-		Start.Now();
+		//	Start.Now();
 		::usleep(m_i64Interval*1000);
 		
 		i64LSCnt = m_i64LaserScanCount;
@@ -74,27 +75,30 @@ void Transform2Hz::StartPublish()
 		i64WFDCnt= m_i64WheelFeedbackCount;
 		
 		//	publish LaserScan Hz
-		m_fLaserScanHz = ((float)(i64LSCnt-m_i64LaserScanPrevCount))/((float)((End.Now() - Start).ToMilliSecond()));
-		cout<<"laserscan_count = "<<i64LSCnt-m_i64LaserScanPrevCount<<endl;
-		m_i64LaserScanPrevCount=i64LSCnt;
-		temp.data = m_fLaserScanHz;
-		cout<<"laserscan_hz = "<<m_fLaserScanHz<<endl;
+		//	m_fLaserScanHz = ((float)(i64LSCnt-m_i64LaserScanPrevCount))/((float)((End.Now() - Start).ToMilliSecond()));
+		m_fLaserScanHz = ((float)i64LSCnt)/((float)((End.Now() - Start).ToMilliSecond()));
+		//cout<<"laserscan_count = "<<i64LSCnt-m_i64LaserScanPrevCount<<endl;
+		//m_i64LaserScanPrevCount=i64LSCnt;
+		temp.data = m_fLaserScanHz*1000.0f;
+		//cout<<"laserscan_hz = "<<m_fLaserScanHz<<endl;
 		m_pubLaserScanHz.publish(temp);
 		
 		//	publish Imu Hz
-		m_fImuHz = ((float)(i64IMUCnt-m_i64ImuPrevCount))/((float)((End.Now() - Start).ToMilliSecond()));
-		cout<<"imu_count = "<<i64IMUCnt-m_i64ImuPrevCount<<endl;
-		m_i64ImuPrevCount = i64IMUCnt;
-		temp.data = m_fImuHz;
-		cout<<"imu_hz = "<<m_fImuHz<<endl;
+		//	m_fImuHz = ((float)(i64IMUCnt-m_i64ImuPrevCount))/((float)((End.Now() - Start).ToMilliSecond()));
+		m_fImuHz = ((float)i64IMUCnt)/((float)((End.Now() - Start).ToMilliSecond()));
+		//cout<<"imu_count = "<<i64IMUCnt-m_i64ImuPrevCount<<endl;
+		//m_i64ImuPrevCount = i64IMUCnt;
+		temp.data = m_fImuHz*1000.0f;
+		//cout<<"imu_hz = "<<m_fImuHz<<endl;
 		m_pubImuHz.publish(temp);
 		
 		//	publish WheelFb Hz
-		m_fWheelFeedbacknHz = ((float)(i64WFDCnt-m_i64WheelFeedbackPrevCount))/((float)((End.Now() - Start).ToMilliSecond()));
-		cout<<"wheelfb_count = "<<i64WFDCnt-m_i64WheelFeedbackPrevCount<<endl;
-		m_i64WheelFeedbackPrevCount = i64WFDCnt;
-		temp.data = m_fWheelFeedbacknHz;
-		cout<<"wheelfb_hz = "<<m_fWheelFeedbacknHz<<endl;
+		//	m_fWheelFeedbacknHz = ((float)(i64WFDCnt-m_i64WheelFeedbackPrevCount))/((float)((End.Now() - Start).ToMilliSecond()));
+		m_fWheelFeedbacknHz = ((float)i64WFDCnt)/((float)((End.Now() - Start).ToMilliSecond()));
+		//cout<<"wheelfb_count = "<<i64WFDCnt-m_i64WheelFeedbackPrevCount<<endl;
+		//m_i64WheelFeedbackPrevCount = i64WFDCnt;
+		temp.data = m_fWheelFeedbacknHz*1000.0f;
+		//cout<<"wheelfb_hz = "<<m_fWheelFeedbacknHz<<endl;
 		m_pubWheelFeedbackHz.publish(temp);
 		//ros::spinOnce();
 	};
