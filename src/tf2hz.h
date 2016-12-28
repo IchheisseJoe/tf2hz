@@ -30,22 +30,11 @@ private:
 	ros::Publisher	m_pubLaserScanHz;
 	ros::Publisher	m_pubImuHz;
 	ros::Publisher	m_pubWheelFeedbackHz;
-	
 	pthread_t		m_PublishThreadID;
-	
 	int64_t			m_i64Interval;
-	int64_t			m_i64TotalMillionSeconds;
 	int64_t			m_i64LaserScanCount;
 	int64_t			m_i64ImuCount;
 	int64_t			m_i64WheelFeedbackCount;
-	int64_t			m_i64LaserScanPrevCount;
-	int64_t			m_i64ImuPrevCount;
-	int64_t			m_i64WheelFeedbackPrevCount;
-	float			m_fLaserScanHz;
-	float			m_fImuHz;
-	float			m_fWheelFeedbacknHz;
-	
-	bool			m_bIsExit, m_bIsFirstTime;
 };
 	
 #endif	
